@@ -35,6 +35,7 @@ public class LoginInfoServiceImplementation implements LoginInfoService {
     public LoginInfo editLoginInfo(EditLoginInfoRequest editLoginInfoRequest, Vault vault) {
         LoginInfo loginInfo = findLoginInfoInVault(editLoginInfoRequest.getTitle().toLowerCase(), vault);
         validateEditedLoginInfoTitle(editLoginInfoRequest.getTitle(), editLoginInfoRequest.getEditedTitle(), vault);
+        validateWebsite(editLoginInfoRequest.getEditedWebsite());
         LoginInfo updatedLoginInfo = editLoginInfoRequestMap(editLoginInfoRequest, loginInfo);
         loginInfoRepository.save(updatedLoginInfo);
         return updatedLoginInfo;

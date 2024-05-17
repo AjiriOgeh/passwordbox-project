@@ -6,14 +6,14 @@ import com.passwordbox.dataTransferObjects.responses.*;
 
 import java.time.format.DateTimeFormatter;
 
-import static com.passwordbox.utilities.CreditCardDateValidation.areEditedExpiryMonthAndYearFilled;
+import static com.passwordbox.utilities.CreditCardDateValidation.areEditedExpiryMonthAndYearFieldsWithValues;
 import static com.passwordbox.utilities.CreditCardValidator.determineCreditCardType;
 
 public class Mappers {
     public static User registerRequestMap(SignUpRequest signUpRequest) {
         User user = new User();
         user.setUsername(signUpRequest.getUsername().toLowerCase());
-        user.setMasterPassword(signUpRequest.getMasterPassword());
+        user.setMasterPassword(DataCypher.encryptData(signUpRequest.getMasterPassword()));
         return user;
     }
 
@@ -122,7 +122,7 @@ public class Mappers {
         if (editCreditCardRequest.getEditedCVV() != null) creditCard.setCvv(DataCypher.encryptData(editCreditCardRequest.getEditedCVV()));
         if (editCreditCardRequest.getEditedPin() != null) creditCard.setPin(DataCypher.encryptData(editCreditCardRequest.getEditedPin()));
         if (editCreditCardRequest.getEditedCardNumber() != null) creditCard.setCreditCardType(determineCreditCardType(editCreditCardRequest.getEditedCardNumber()));
-        if (areEditedExpiryMonthAndYearFilled(editCreditCardRequest)) creditCard.setExpiryDate(getExpiryDate(editCreditCardRequest.getEditedExpiryMonth(), editCreditCardRequest.getEditedExpiryYear()));
+        if (areEditedExpiryMonthAndYearFieldsWithValues(editCreditCardRequest)) creditCard.setExpiryDate(getExpiryDate(editCreditCardRequest.getEditedExpiryMonth(), editCreditCardRequest.getEditedExpiryYear()));
         return creditCard;
     }
 
@@ -167,6 +167,7 @@ public class Mappers {
         SavePassportResponse savePassportResponse = new SavePassportResponse();
         savePassportResponse.setId(passport.getId());
         savePassportResponse.setTitle(passport.getTitle());
+        savePassportResponse.setNumber(passport.getPassportNumber());
         return savePassportResponse;
     }
 

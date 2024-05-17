@@ -25,7 +25,7 @@ public class TitleInputValidation {
     private static boolean doesEditedLoginInfoTitleExist(String title, String editedTitle, Vault vault) {
         if (title.equalsIgnoreCase(editedTitle)) return false;
         for(int count = 0; count < vault.getLoginInfos().size(); count++){
-            if (vault.getPassports().get(count).getTitle().equalsIgnoreCase(editedTitle))
+            if (vault.getLoginInfos().get(count).getTitle().equalsIgnoreCase(editedTitle))
                 return true;
         }
         return false;
@@ -37,6 +37,7 @@ public class TitleInputValidation {
     }
 
     private static boolean doesCreditCardTitleExist(String title, Vault vault) {
+        if (vault.getCreditCards().isEmpty()) return false;
         for(int count = 0; count < vault.getCreditCards().size(); count++){
             if (vault.getCreditCards().get(count).getTitle().equalsIgnoreCase(title.toLowerCase()))
                 return true;
@@ -52,7 +53,7 @@ public class TitleInputValidation {
     private static boolean doesEditedCreditCardTitleExist(String title, String editedTitle, Vault vault) {
         if (title.equalsIgnoreCase(editedTitle)) return false;
         for(int count = 0; count < vault.getCreditCards().size(); count++){
-            if (vault.getPassports().get(count).getTitle().equalsIgnoreCase(editedTitle))
+            if (vault.getCreditCards().get(count).getTitle().equalsIgnoreCase(editedTitle))
                 return true;
         }
         return false;

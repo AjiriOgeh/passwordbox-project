@@ -53,7 +53,7 @@ public class CreditCardDateValidation {
         if (month != null && year == null) throw new DateMonthException("Please enter a valid input for both month and year.");
     }
 
-    public static boolean areEditedExpiryMonthAndYearFilled(EditCreditCardRequest editCreditCardRequest) {
+    public static boolean areEditedExpiryMonthAndYearFieldsWithValues(EditCreditCardRequest editCreditCardRequest) {
         if (editCreditCardRequest.getEditedExpiryMonth() != null && editCreditCardRequest.getEditedExpiryYear() != null) return true;
         return false;
     }

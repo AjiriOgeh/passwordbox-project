@@ -45,7 +45,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("gmail login");
-        saveLoginInfoRequest.setWebsite("www.gmail.com");
+        saveLoginInfoRequest.setWebsite("https://www.gmail.com");
         saveLoginInfoRequest.setLoginId("jack123@gmail.com");
         saveLoginInfoRequest.setPassword("password.");
         userService.saveLoginInfo(saveLoginInfoRequest);
@@ -244,7 +244,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("yahoo login");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
         SaveLoginInfoResponse saveLoginInfoResponse = userService.saveLoginInfo(saveLoginInfoRequest);
@@ -263,7 +263,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jim456");
         saveLoginInfoRequest.setTitle("yahoo com");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jim456@yahoo.com");
 
         assertThrows(UserNotFoundException.class, ()->userService.saveLoginInfo(saveLoginInfoRequest));
@@ -283,7 +283,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("yahoo login");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -295,7 +295,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle(null);
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -307,7 +307,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -319,7 +319,7 @@ public class UserServiceImplementationTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("gmail login");
-        saveLoginInfoRequest.setWebsite("www.gmail.com");
+        saveLoginInfoRequest.setWebsite("https://www.gmail.com");
         saveLoginInfoRequest.setLoginId("jack123@gmail.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -332,7 +332,7 @@ public class UserServiceImplementationTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
         EditLoginInfoResponse editLoginInfoResponse = userService.editLoginInfo(editLoginInfoRequest);
@@ -352,7 +352,7 @@ public class UserServiceImplementationTest {
         editLoginInfoRequest.setUsername("jim456");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jim456@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -374,7 +374,7 @@ public class UserServiceImplementationTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -387,7 +387,7 @@ public class UserServiceImplementationTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("hotmail login");
         editLoginInfoRequest.setEditedTitle("yahoo mail Login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -400,7 +400,7 @@ public class UserServiceImplementationTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -415,7 +415,7 @@ public class UserServiceImplementationTest {
         ViewLoginInfoResponse viewLoginInfoResponse = userService.viewLoginInfo(viewLoginInfoRequest);
 
         assertEquals("jack123@gmail.com", viewLoginInfoResponse.getLoginId());
-        assertEquals("www.gmail.com", viewLoginInfoResponse.getWebsite());
+        assertEquals("https://www.gmail.com", viewLoginInfoResponse.getWebsite());
     }
 
     @Test
@@ -521,10 +521,10 @@ public class UserServiceImplementationTest {
     @Test
     public void userGeneratesPasswordTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
-        generatePasswordRequest.setUpperCaseCharacters(false);
-        generatePasswordRequest.setSpecialCharacters(true);
-        generatePasswordRequest.setNumericCharacters(false);
-        generatePasswordRequest.setLowerCaseCharacters(true);
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("12");
         GeneratePasswordResponse generatePasswordResponse = userService.generatePassword(generatePasswordRequest);
 
@@ -534,10 +534,10 @@ public class UserServiceImplementationTest {
     @Test
     public void userGeneratesPasswordTwice_PasswordsAreNotTheSameTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
-        generatePasswordRequest.setUpperCaseCharacters(false);
-        generatePasswordRequest.setSpecialCharacters(true);
-        generatePasswordRequest.setNumericCharacters(false);
-        generatePasswordRequest.setLowerCaseCharacters(true);
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("12");
         GeneratePasswordResponse firstGeneratePasswordResponse = userService.generatePassword(generatePasswordRequest);
         GeneratePasswordResponse secondGeneratePasswordResponse = userService.generatePassword(generatePasswordRequest);
@@ -548,10 +548,10 @@ public class UserServiceImplementationTest {
     @Test
     public void userGeneratesPassword_LengthIsNotANumber_ThrowsExceptionTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
-        generatePasswordRequest.setUpperCaseCharacters(false);
-        generatePasswordRequest.setSpecialCharacters(true);
-        generatePasswordRequest.setNumericCharacters(false);
-        generatePasswordRequest.setLowerCaseCharacters(true);
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("A");
 
         assertThrows(InvalidPasscodeLengthException.class, ()->userService.generatePassword(generatePasswordRequest));
@@ -560,25 +560,37 @@ public class UserServiceImplementationTest {
     @Test
     public void userGeneratesPassword_NumberIsNegative_ThrowsExceptionTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
-        generatePasswordRequest.setUpperCaseCharacters(false);
-        generatePasswordRequest.setSpecialCharacters(true);
-        generatePasswordRequest.setNumericCharacters(false);
-        generatePasswordRequest.setLowerCaseCharacters(true);
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("-1");
 
         assertThrows(InvalidPasscodeLengthException.class, ()->userService.generatePassword(generatePasswordRequest));
     }
 
     @Test
-    public void userGeneratesPassword_NumberIsGreaterThan30_ThrowsException() {
+    public void userGeneratesPassword_NumberIsGreaterThan40_ThrowsExceptionTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
-        generatePasswordRequest.setUpperCaseCharacters(false);
-        generatePasswordRequest.setSpecialCharacters(true);
-        generatePasswordRequest.setNumericCharacters(false);
-        generatePasswordRequest.setLowerCaseCharacters(true);
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("41");
 
         assertThrows(InvalidPasscodeLengthException.class, ()->userService.generatePassword(generatePasswordRequest));
+    }
+
+    @Test
+    public void userGeneratesPassword_ChoiceInputIsInvalid_ThrowsExceptionTest(){
+        GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("remove");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
+        generatePasswordRequest.setLength("12");
+
+        assertThrows(GeneratePasswordException.class, ()->userService.generatePassword(generatePasswordRequest));
     }
 
     @Test
@@ -1323,7 +1335,6 @@ public class UserServiceImplementationTest {
 
         assertThrows(UserNotFoundException.class, ()->userService.deletePassport(deletePassportRequest));
     }
-
     @Test
     public void userDeletes_NonExistentPassport_ThrowsExceptionTest() {
         DeletePassportRequest deletePassportRequest = new DeletePassportRequest();

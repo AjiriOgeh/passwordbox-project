@@ -1,6 +1,7 @@
 package com.passwordbox.utilities;
 
 import com.passwordbox.dataTransferObjects.requests.GeneratePasswordRequest;
+import com.passwordbox.exceptions.GeneratePasswordException;
 
 import java.security.SecureRandom;
 import java.time.LocalDate;
@@ -17,10 +18,12 @@ public final class PasscodeGenerator {
         StringBuilder password = new StringBuilder();
         String characters = "";
 
-        if (generatePasswordRequest.isNumericCharacters()) characters += numericCharacters;
-        if (generatePasswordRequest.isUpperCaseCharacters()) characters += upperCaseCharacters;
-        if (generatePasswordRequest.isLowerCaseCharacters()) characters += lowerCaseCharacters;
-        if (generatePasswordRequest.isSpecialCharacters()) characters += specialCharacters;
+        if (generatePasswordRequest.getNumericCharactersChoice().equalsIgnoreCase("YES")) characters += numericCharacters;
+        if (generatePasswordRequest.getUppercaseCharactersChoice().equalsIgnoreCase("YES")) characters += upperCaseCharacters;
+        if (generatePasswordRequest.getLowercaseCharactersChoice().equalsIgnoreCase("YES")) characters += lowerCaseCharacters;
+        if (generatePasswordRequest.getSpecialCharactersChoice().equalsIgnoreCase("YES")) characters += specialCharacters;
+
+        if(characters.isEmpty()) throw new GeneratePasswordException("Please enter 'Yes' in a character choice to generate password.");
         for (int count = 0; count < Integer.parseInt(generatePasswordRequest.getLength()); count++){
             int randomIndex = secureRandom.nextInt(characters.length());
             password.append(characters.charAt(randomIndex));

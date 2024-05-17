@@ -8,6 +8,8 @@ import com.passwordbox.dataTransferObjects.requests.*;
 import com.passwordbox.dataTransferObjects.responses.DeletePassportResponse;
 import com.passwordbox.dataTransferObjects.responses.SavePassportResponse;
 import com.passwordbox.dataTransferObjects.responses.ViewPassportResponse;
+import com.passwordbox.exceptions.GeneratePasswordException;
+import com.passwordbox.exceptions.InvalidPasscodeLengthException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("gmail login");
-        saveLoginInfoRequest.setWebsite("www.gmail.com");
+        saveLoginInfoRequest.setWebsite("https://www.gmail.com");
         saveLoginInfoRequest.setLoginId("jack123@gmail.com");
         saveLoginInfoRequest.setPassword("password.");
         userController.saveNewLoginInfo(saveLoginInfoRequest);
@@ -208,7 +210,7 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("yahoo login");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -221,7 +223,7 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jim456");
         saveLoginInfoRequest.setTitle("yahoo login");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -240,7 +242,7 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle("yahoo login");
-        saveLoginInfoRequest.setWebsite("www.yahoo.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
         saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
@@ -253,8 +255,8 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle(null);
-        saveLoginInfoRequest.setWebsite("www.gmail.com");
-        saveLoginInfoRequest.setLoginId("jack123@gmail.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
+        saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
         var response = userController.saveNewLoginInfo(saveLoginInfoRequest);
@@ -266,8 +268,8 @@ public class UserControllerTest {
         SaveLoginInfoRequest saveLoginInfoRequest = new SaveLoginInfoRequest();
         saveLoginInfoRequest.setUsername("jack123");
         saveLoginInfoRequest.setTitle(null);
-        saveLoginInfoRequest.setWebsite("www.gmail.com");
-        saveLoginInfoRequest.setLoginId("jack123@gmail.com");
+        saveLoginInfoRequest.setWebsite("https://www.yahoo.com");
+        saveLoginInfoRequest.setLoginId("jack123@yahoo.com");
         saveLoginInfoRequest.setPassword("password.");
 
         var response = userController.saveNewLoginInfo(saveLoginInfoRequest);
@@ -293,7 +295,7 @@ public class UserControllerTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -307,7 +309,7 @@ public class UserControllerTest {
         editLoginInfoRequest.setUsername("jim456");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -327,7 +329,7 @@ public class UserControllerTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -341,7 +343,7 @@ public class UserControllerTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("hotmail login");
         editLoginInfoRequest.setEditedTitle("yahoo login");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -355,7 +357,7 @@ public class UserControllerTest {
         editLoginInfoRequest.setUsername("jack123");
         editLoginInfoRequest.setTitle("gmail login");
         editLoginInfoRequest.setEditedTitle("");
-        editLoginInfoRequest.setEditedWebsite("www.yahoo.com");
+        editLoginInfoRequest.setEditedWebsite("https://www.yahoo.com");
         editLoginInfoRequest.setEditedLoginId("jack123@yahoo.com");
         editLoginInfoRequest.setEditedPassword("word.");
 
@@ -470,13 +472,13 @@ public class UserControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
-    /**
-     *
-     * the user generates password should be fileld yp
-     */
     @Test
     public void userGeneratesPasswordTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("16");
 
         var response = userController.generatePassword(generatePasswordRequest);
@@ -484,9 +486,52 @@ public class UserControllerTest {
     }
 
     @Test
+    public void userGeneratesPassword_NumberIsNegativeTest() {
+        GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
+        generatePasswordRequest.setLength("-1");
+
+        var response = userController.generatePassword(generatePasswordRequest);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
     public void userGeneratesPassword_LengthIsNotANumberTest() {
         GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
         generatePasswordRequest.setLength("A");
+
+        var response = userController.generatePassword(generatePasswordRequest);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void userGeneratesPassword_NumberIsGreaterThanTest() {
+        GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("no");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
+        generatePasswordRequest.setLength("41");
+
+        var response = userController.generatePassword(generatePasswordRequest);
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    public void userGeneratesPassword_ChoiceInputIsInvalidTest(){
+        GeneratePasswordRequest generatePasswordRequest = new GeneratePasswordRequest();
+        generatePasswordRequest.setUppercaseCharactersChoice("remove");
+        generatePasswordRequest.setLowercaseCharactersChoice("yes");
+        generatePasswordRequest.setNumericCharactersChoice("no");
+        generatePasswordRequest.setSpecialCharactersChoice("yes");
+        generatePasswordRequest.setLength("12");
 
         var response = userController.generatePassword(generatePasswordRequest);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
@@ -1067,7 +1112,7 @@ public class UserControllerTest {
         editPassportRequest.setTitle("my british passport");
         editPassportRequest.setEditedTitle("my canadian passport");
         editPassportRequest.setEditedPassportNumber("C1357911");
-        editPassportRequest.setEditedIssueDate("07/06rerrre/2020");
+        editPassportRequest.setEditedIssueDate("31/06/2020");
         editPassportRequest.setEditedExpiryDate("06/07fdfdf/2030");
 
         var response = userController.editPassport(editPassportRequest);
@@ -1155,6 +1200,5 @@ public class UserControllerTest {
         var response = userController.deletePassport(deletePassportRequest);
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
-
 
 }

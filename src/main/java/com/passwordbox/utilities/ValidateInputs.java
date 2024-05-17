@@ -1,7 +1,10 @@
 package com.passwordbox.utilities;
 
+import com.passwordbox.dataTransferObjects.requests.GeneratePasswordRequest;
 import com.passwordbox.dataTransferObjects.requests.SaveCreditCardRequest;
 import com.passwordbox.dataTransferObjects.requests.SaveLoginInfoRequest;
+import com.passwordbox.exceptions.GeneratePasswordException;
+import com.passwordbox.exceptions.InvalidPasscodeLengthException;
 import com.passwordbox.exceptions.NullFieldException;
 
 import java.net.HttpURLConnection;
@@ -30,6 +33,25 @@ public class ValidateInputs {
         }
         catch (Exception error) {
             return false;
+        }
+    }
+
+    public static void validatePasscodeLength(GeneratePasswordRequest generatePasswordRequest) {
+        if (generatePasswordRequest.getLength() == null) throw new InvalidPasscodeLengthException("Please enter a valid number.");
+        if (!generatePasswordRequest.getLength().matches("\\d+")) throw new InvalidPasscodeLengthException("Please enter a valid number.");
+        if (Integer.parseInt(generatePasswordRequest.getLength()) < 1 || Integer.parseInt(generatePasswordRequest.getLength()) > 40)
+            throw new InvalidPasscodeLengthException("Please enter a number between 1 - 40.");
+    }
+
+    public static void validateGeneratePasswordFields(GeneratePasswordRequest generatePasswordRequest){
+        String[] generatedPasswordInputs = {generatePasswordRequest.getLowercaseCharactersChoice(),
+                generatePasswordRequest.getUppercaseCharactersChoice(), generatePasswordRequest.getNumericCharactersChoice(),
+                generatePasswordRequest.getSpecialCharactersChoice()};
+
+        for (String generatedPasswordInput: generatedPasswordInputs) {
+            if (generatedPasswordInput == null) throw new GeneratePasswordException("Please enter 'Yes' or 'No' for password choice.");
+            else if (!generatedPasswordInput.equalsIgnoreCase("yes") && !generatedPasswordInput.equalsIgnoreCase("no"))
+                throw new GeneratePasswordException("Please enter 'Yes' or 'No' for password choice.");
         }
     }
 

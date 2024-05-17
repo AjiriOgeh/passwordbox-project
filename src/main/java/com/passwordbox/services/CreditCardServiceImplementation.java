@@ -44,9 +44,10 @@ public class CreditCardServiceImplementation implements CreditCardService{
     public CreditCard editCreditCard(EditCreditCardRequest editCreditCardRequest, Vault vault) {
         CreditCard creditCard = findCreditCardInVault(editCreditCardRequest.getTitle().toLowerCase(), vault);
         validateEditedCreditCardTitle(editCreditCardRequest.getTitle(), editCreditCardRequest.getEditedTitle(), vault);
-        validateCreditCardDetails(editCreditCardRequest.getEditedCardNumber(), editCreditCardRequest.getEditedCVV(), editCreditCardRequest.getEditedPin());
+        validateCreditCardDetails(editCreditCardRequest.getEditedCardNumber(),
+                editCreditCardRequest.getEditedCVV(), editCreditCardRequest.getEditedPin());
         validateEditedExpiryMonthAndYearFields(editCreditCardRequest.getEditedExpiryMonth(), editCreditCardRequest.getEditedExpiryYear());
-        if (areEditedExpiryMonthAndYearFilled(editCreditCardRequest))
+        if (areEditedExpiryMonthAndYearFieldsWithValues(editCreditCardRequest))
             validateExpiryDate(editCreditCardRequest.getEditedExpiryMonth(), editCreditCardRequest.getEditedExpiryYear());
         CreditCard updatedCreditCard = editCreditCardRequestMap(editCreditCardRequest, creditCard);
         creditCardRepository.save(updatedCreditCard);

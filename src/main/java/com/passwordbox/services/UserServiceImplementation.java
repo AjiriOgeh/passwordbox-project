@@ -5,6 +5,7 @@ import com.passwordbox.data.repositories.UserRepository;
 import com.passwordbox.dataTransferObjects.requests.*;
 import com.passwordbox.dataTransferObjects.responses.*;
 import com.passwordbox.exceptions.*;
+import com.passwordbox.utilities.DataCypher;
 import com.passwordbox.utilities.PasscodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import static com.passwordbox.utilities.FindDetails.*;
 import static com.passwordbox.utilities.Mappers.*;
+import static com.passwordbox.utilities.ValidateInputs.validateGeneratePasswordFields;
+import static com.passwordbox.utilities.ValidateInputs.validatePasscodeLength;
 
 @Service
 public class UserServiceImplementation implements UserService{
@@ -21,7 +24,7 @@ public class UserServiceImplementation implements UserService{
 
     @Autowired
     private VaultService vaultService;
-
+    //encryptmasterpassword
     @Override
     public RegisterResponse signUp(SignUpRequest signUpRequest) {
         validateUsername(signUpRequest.getUsername());
@@ -62,7 +65,8 @@ public class UserServiceImplementation implements UserService{
     public LoginResponse login(LoginRequest loginRequest) {
         User user = userRepository.findByUsername(loginRequest.getUsername().toLowerCase());
         if (user == null) throw new UserNotFoundException("Invalid login details. Please try again.");
-        if (!user.getMasterPassword().equals(loginRequest.getPassword())) throw new InvalidPasswordException("Invalid login details. Please try again.");
+        if (!DataCypher.decryptData(user.getMasterPassword()).equals(loginRequest.getPassword()))
+            throw new InvalidPasswordException("Invalid login details. Please try again.");
         user.setLocked(false);
         userRepository.save(user);
         return loginResponseMap(user);
@@ -102,21 +106,18 @@ public class UserServiceImplementation implements UserService{
         User user = userRepository.findByUsername(deleteLoginInfoRequest.getUsername().toLowerCase());
         if (user == null) throw new UserNotFoundException(String.format("User %s does not exist.", deleteLoginInfoRequest.getUsername()));
         if (user.isLocked()) throw new ProfileLockStateException("Please login to delete loginInfo.");
-        if (!user.getMasterPassword().equals(deleteLoginInfoRequest.getMasterPassword())) throw new InvalidPasswordException("Incorrect password. Please try again.");
+        if (!DataCypher.decryptData(user.getMasterPassword()).equals(deleteLoginInfoRequest.getMasterPassword()))
+            throw new InvalidPasswordException("Incorrect password. Please try again.");
         DeleteLoginInfoResponse deleteLoginInfoResponse =  vaultService.deleteLoginInfo(deleteLoginInfoRequest, user.getVault());
         userRepository.save(user);
         return deleteLoginInfoResponse;
     }
 
     public GeneratePasswordResponse generatePassword(GeneratePasswordRequest generatePasswordRequest) {
-        validatePasscodeLength(generatePasswordRequest.getLength());
+        validateGeneratePasswordFields(generatePasswordRequest);
+        validatePasscodeLength(generatePasswordRequest);
         String password = PasscodeGenerator.generatePassword(generatePasswordRequest);
         return generatePasswordResponseMap(password);
-    }
-
-    private static void validatePasscodeLength(String passcodeLength) {
-        if (!passcodeLength.matches("\\d+")) throw new InvalidPasscodeLengthException("Please enter a valid number.");
-        if (Integer.parseInt(passcodeLength) < 1 || Integer.parseInt(passcodeLength) > 40) throw new InvalidPasscodeLengthException("Please enter a number between 1 - 30.");
     }
 
     @Override
@@ -152,7 +153,8 @@ public class UserServiceImplementation implements UserService{
         User user = userRepository.findByUsername(deleteCreditCardRequest.getUsername());
         if (user == null) throw new UserNotFoundException(String.format("User %s does not exist.", deleteCreditCardRequest.getUsername()));
         if (user.isLocked()) throw new ProfileLockStateException("Please login to delete credit card.");
-        if (!user.getMasterPassword().equals(deleteCreditCardRequest.getMasterPassword())) throw new InvalidPasswordException("Incorrect password. Please try again.");
+        if (!DataCypher.decryptData(user.getMasterPassword()).equals(deleteCreditCardRequest.getMasterPassword()))
+            throw new InvalidPasswordException("Incorrect password. Please try again.");
         DeleteCreditCardResponse deleteCreditCardResponse = vaultService.deleteCreditCard(deleteCreditCardRequest, user.getVault());
         userRepository.save(user);
         return deleteCreditCardResponse;
@@ -192,11 +194,11 @@ public class UserServiceImplementation implements UserService{
         User user = userRepository.findByUsername(deletePassportRequest.getUsername());
         if (user == null) throw new UserNotFoundException(String.format("User %s does not exist.", deletePassportRequest.getUsername()));
         if (user.isLocked()) throw new ProfileLockStateException("Please login to delete passport.");
-        if (!user.getMasterPassword().equals(deletePassportRequest.getMasterPassword())) throw new InvalidPasswordException("Incorrect password. Please try again.");
+        if (!DataCypher.decryptData(user.getMasterPassword()).equals(deletePassportRequest.getMasterPassword()))
+            throw new InvalidPasswordException("Incorrect password. Please try again.");
         DeletePassportResponse deletePassportResponse = vaultService.deletePassport(deletePassportRequest, user.getVault());
         userRepository.save(user);
         return deletePassportResponse;
     }
 
 }
-

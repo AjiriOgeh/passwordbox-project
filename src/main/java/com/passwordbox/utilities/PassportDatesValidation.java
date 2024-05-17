@@ -21,7 +21,6 @@ public class PassportDatesValidation {
             return false;
         }
     }
-
     public static void validatePassportDates(String issueDate, String expiryDate) {
         if (!isDateValid(issueDate)) throw new InvalidPassportDateException("Please enter a valid passport issue date with format - d/m/yyyy");
         if (!isDateValid(expiryDate)) throw new InvalidPassportDateException("Please enter a valid passport expiry date with format - d/m/yyyy");

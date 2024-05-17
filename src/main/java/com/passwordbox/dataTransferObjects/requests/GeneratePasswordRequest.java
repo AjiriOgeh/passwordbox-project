@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class GeneratePasswordRequest {
-    private boolean upperCaseCharacters;
-    private boolean lowerCaseCharacters;
-    private boolean numericCharacters;
-    private boolean specialCharacters;
+    private String uppercaseCharactersChoice;
+    private String lowercaseCharactersChoice;
+    private String numericCharactersChoice;
+    private String specialCharactersChoice;
     private String length;
 }
